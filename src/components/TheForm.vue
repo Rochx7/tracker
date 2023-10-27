@@ -6,16 +6,14 @@
       </div>
       <div class="column">
         <div class="is-flex is-align-items-center is-justify-content-space-between">
-          <section>
-            <strong>00:00:00</strong>
-          </section>
-          <button class="button">
+          <StopWatch :timingInSecond="timingInSecond"/>
+          <button class="button" @click="init">
             <span class="icon">
               <i class="fas fa-play"></i>
             </span>
             <span>Play</span>
           </button>
-          <button class="button">
+          <button class="button" @click="finalize">
             <span class="icon">
               <i class="fas fa-stop"></i>
             </span>
@@ -29,11 +27,26 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue'
+import StopWatch from './StopWatch.vue'
 export default defineComponent({
-  name: 'TheForm',
-  methods:{
-    
-  }
+    name: 'TheForm',
+    data: () => {
+        return {
+            timingInSecond: 0,
+            stopwatch: 0
+        };
+    },
+    methods: {
+        init() {
+            this.stopwatch = setInterval(() => {
+                this.timingInSecond += 1;
+            }, 1000);
+        },
+        finalize() {
+            clearInterval(this.stopwatch);
+        }
+    },
+    components: { StopWatch }
 })
 
 </script>
