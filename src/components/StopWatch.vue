@@ -1,6 +1,6 @@
 <template>
-  <section>
-    <strong>{{ timeElapsed }}</strong>
+  <section >
+    <strong class="display" :class="{'box-task': hasTask}">{{ timeElapsed }}</strong>
   </section>
 </template>
 
@@ -13,6 +13,9 @@ export default defineComponent ({
     timingInSecond:{
       type: Number,
       default:0
+    },
+    hasTask:{
+      type: Boolean
     }
   },
   computed: { 
@@ -22,3 +25,12 @@ export default defineComponent ({
 	},
 })
 </script>
+
+<style scoped>
+.display {
+  color: var(--text-primary);
+}
+.box-task{
+  color: var(--text-secondary);
+}
+</style>

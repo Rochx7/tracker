@@ -1,5 +1,5 @@
 <template>
-  <div class="box">
+  <div class="box form">
     <div class="columns">
       <div class="column is-8" role="form" aria-label="Formulário para criação de uma nova tarefa">
         <input type="text" class="input" placeholder="Qual tarefa você deseja iniciar?" v-model="description">
@@ -16,16 +16,27 @@ import {defineComponent} from 'vue'
 import TheTimer from './TheTimer.vue'
 export default defineComponent({
     name: 'TheForm',
+    emits:['onSaveTask'],
     components: { TheTimer },
     data: () => {
       return {description:''}
     },
     methods:{
       finishCount(time: number) :void{
-        console.log(this.description,time)
+        this.$emit('onSaveTask',{
+          durationInSeconds: time,
+          description: this.description
+        })
         this.description = ''
       }
     }
 })
 
 </script>
+
+<style>
+.form {
+  color:var(--text-primary);
+  background-color:var(--bg-primary)
+}
+</style>
