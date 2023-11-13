@@ -6,6 +6,23 @@
     <button class="button" @click="changeTheme">
       {{ textButton }}
     </button>
+   <nav class="panel mt-5">
+    <ul>
+      <li>
+        <router-link to="/" class="link">
+          <i class="fas fa-tasks"></i>
+          Tasks
+        </router-link>
+      </li>
+      <li>
+        <router-link  to="/projects" class="link">
+          <i class="fas fa-project-diagram"></i>
+          Projects
+        </router-link>
+      </li>
+      
+    </ul>
+   </nav>
   </header>
 </template>
 
@@ -48,12 +65,24 @@ h1{
   text-align:center;
 }
 img{
-    max-width:250px;
-  };
+  max-width:250px;
+};
 @media only screen and (max-width: 768px){
   header{
     padding: 2.5rem;
     height: auto;
   }
+}
+.panel li {
+  margin: 8px 0;
+}
+.link {
+  color: #fff;
+}
+.link:hover {
+  color: #FAF0CA;
+}
+.link.router-link-active {
+  color: #FAF0CA;
 }
 </style>

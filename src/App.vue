@@ -4,14 +4,7 @@
       <SideBar @onChangeTheme="changeTheme"/>
     </div>
     <div class="column is-three-quarter content" >
-      <TheForm @onSaveTask="saveTask"/>
-      <div class="list">
-        <TaskItem v-for="(task, index) in tasks" :key="index" :task="task"/>
-        <ComponentBox v-if="listIsEmpty" :listIsEmpty="listIsEmpty">
-        Você não esta muito produtivo hoje 🤔
-      </ComponentBox>
-      </div>
-      
+      <router-view></router-view>
     </div>
   </main>
 </template>
@@ -20,9 +13,6 @@
 import { defineComponent } from 'vue';
 
 import SideBar from './components/SideBar.vue'
-import TheForm from './components/TheForm.vue';
-import TaskItem from './components/TaskItem.vue';
-import ComponentBox from './components/ComponentBox.vue';
 import ITask from './interfaces/ITask'
 
 export default defineComponent({
@@ -47,10 +37,7 @@ export default defineComponent({
     }
   },
   components:{
-    SideBar,
-    TheForm,
-    TaskItem,
-    ComponentBox
+    SideBar
 }
 });
 </script>
