@@ -2,8 +2,11 @@
 <template>
   <ComponentBox>
     <div class="columns">
-      <div class="column is-7">
-        {{ task.description || 'Tarefa sem descrição' }}
+      <div class="column is-4">
+        {{ task.description || 'Task without description!🚨' }}
+      </div>
+      <div class="column is-3">
+        {{ task.project?.name || 'No project linked to the task!🚨' }}
       </div>
       <div class="column">
         <StopWatch :timingInSecond="task.durationInSeconds" :hasTask="!!task.description"/>
