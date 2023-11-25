@@ -17,9 +17,9 @@
 <script lang="ts">
 import {useStore} from '@/store'
 import { defineComponent } from 'vue';
-import {ADD_PROJECT,EDIT_PROJECT} from "@/store/type-mutations"
 import {TypeNotification} from "@/interfaces/INotifications"
 import useNotify from "@/hooks/notify"
+import { REGISTER_PROJECT,EDIT_PROJECT } from '@/store/type-actions';
 
 export default defineComponent({
   name: 'Form',
@@ -30,7 +30,7 @@ export default defineComponent({
   },
   mounted() {
       if(this.id){
-        const project = this.store.state.projects.find((project)=> project.id === this.id)
+        const project = this.store.state.projects.find((project)=> project.id == this.id)
         this.projectName = project?.name || ''
       }
   },
@@ -50,14 +50,16 @@ export default defineComponent({
   methods: {
     save(){
       if (this.id) {
-        this.store.commit(EDIT_PROJECT,{id: this.id, name:this.projectName})
+        this.store.dispatch(EDIT_PROJECT,{id: this.id, name:this.projectName}).then(()=> this.isSuccess())
       } else {
-        this.store.commit(ADD_PROJECT, this.projectName)
+        this.store.dispatch(REGISTER_PROJECT, this.projectName).then(()=> this.isSuccess())
       }
+    },
+    isSuccess(){
       this.projectName = ''
       this.notify(TypeNotification.SUCCESS,  "Ready!👌", "Your new project is now available.")
       this.$router.push('/projects')
-    },
+    }
   },
 })
 </script>
