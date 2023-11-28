@@ -1,7 +1,7 @@
 
 <template>
   <ComponentBox>
-    <div class="columns">
+    <div class="columns click" @click="clickedTask">
       <div class="column is-4">
         {{ task.description || 'Task without description!🚨' }}
       </div>
@@ -22,13 +22,25 @@ import ComponentBox from './ComponentBox.vue';
 import { defineComponent, PropType } from 'vue';
 
 export default defineComponent({
-  name:'TaskItem',
+  name:'Task',
+  emits:['onTaskClick'],
   props:{
     task:{
       type: Object as PropType<ITask>,
         required: true
     }
   },
+  methods:{
+    clickedTask():void{
+      this.$emit('onTaskClick', this.task)
+    }
+  },
   components:{ StopWatch, ComponentBox }
 })
 </script>
+
+<style scoped>
+ .click {
+  cursor: pointer
+ }
+</style>

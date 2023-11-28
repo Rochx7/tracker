@@ -1,42 +1,42 @@
-import IProject from "@/interfaces/IProject";
+import ITask from "@/interfaces/ITask";
 import { InjectionKey } from "vue";
 import { createStore, Store, useStore as vuexUseStore } from "vuex";
-import {ADD_PROJECT,EDIT_PROJECT,REMOVE_PROJECT,DEFINE_PROJECTS,NOTIFY} from './type-mutations'
+import {NOTIFY, DEFINE_TASKS, ADD_TASK,CHANGE_TASK} from './type-mutations'
 import { INotifications } from "@/interfaces/INotifications";
-import { GET_PROJECTS,REGISTER_PROJECT } from "./type-actions";
+import { GET_TASKS,  REGISTER_TASK, EDIT_TASK} from "./type-actions";
 import clientHttp from "@/http";
+import { project, ProjectState } from "./module/project";
 
-interface State {
-  projects: IProject[],
+export interface State {
+  tasks: ITask[]
   notifications: INotifications[]
+  project: ProjectState
 }
 
 export const key: InjectionKey<Store<State>> = Symbol()
 
 export const store = createStore<State>({
   state: {
-    projects:[],
+    project:{ 
+      projects:[]
+    },
+    tasks:[],
     notifications:[]
   },
   mutations: {
-   [ADD_PROJECT](state, projectName: string) {
-      const project = {
-        id: new Date().toDateString(),
-        name: projectName
-      } as IProject
-      state.projects.push(project)
+    [ADD_TASK](state, task: ITask) {
+      state.tasks.push(task)
     },
-   [EDIT_PROJECT](state, project:IProject) {
-      const index = state.projects.findIndex(proj => proj.id === project.id)
-      state.projects[index] = project
+    
+    [CHANGE_TASK](state, task:ITask) {
+      const index = state.tasks.findIndex(findTask => findTask.id === task.id)
+      state.tasks[index] = task
     },
-   [REMOVE_PROJECT](state, id:string) {
-      const filterProjects = state.projects.filter(proj => proj.id !== id)
-      state.projects = filterProjects
+
+   [DEFINE_TASKS](state, tasks:ITask[]) {
+     state.tasks = tasks
     },
-   [DEFINE_PROJECTS](state, projects:IProject[]) {
-     state.projects = projects
-    },
+
    [NOTIFY](state, newNotification:INotifications) {
      newNotification.id = new Date().getTime()
      state.notifications.push(newNotification)
@@ -47,20 +47,20 @@ export const store = createStore<State>({
     }
   },
   actions:{
-    [GET_PROJECTS]({commit}){
-      clientHttp.get('projects').then(response => commit(DEFINE_PROJECTS,response.data))
+    [GET_TASKS]({ commit }){
+      clientHttp.get('tasks').then(response => commit(DEFINE_TASKS,response.data))
     },
-    [REGISTER_PROJECT](state, projectName:string) {
-      return clientHttp.post('projects', {
-        name: projectName
-      })
-      },
-    [EDIT_PROJECT](state, project:IProject) {
-      return clientHttp.put(`projects/${project.id}`, project)
-      },
-    [REMOVE_PROJECT]({commit}, id:string) {
-      return clientHttp.delete(`projects/${id}`).then(()=> commit('REMOVE_PROJECT',id))
-      },
+
+    [REGISTER_TASK]({ commit }, task:ITask) {
+      return clientHttp.post('tasks', task).then((response) => commit(ADD_TASK,response.data))
+    },
+
+    [EDIT_TASK]({ commit }, task:ITask) {
+      return clientHttp.put(`tasks/${task.id}`, task).then((response) => commit(CHANGE_TASK,response.data))
+    },
+  },
+  modules:{
+    project
   }
 })
 
