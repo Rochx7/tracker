@@ -19,14 +19,14 @@
         </div>
       </div>
       <div class="column">
-        <TheTimer @finishCounting="finishCount"/>
+        <TheTimer @finishCounting="saveTask"/>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import {computed, defineComponent} from 'vue'
+import {computed, defineComponent, ref} from 'vue'
 import TheTimer from './TheTimer.vue'
 import {useStore} from 'vuex'
 import {key} from '@/store'
@@ -35,26 +35,27 @@ export default defineComponent({
     name: 'TheForm',
     emits:['onSaveTask'],
     components: { TheTimer },
-    data: () => {
-      return {
-        description:'',
-        idProject:''
-      }
-    },
-    methods:{
-      finishCount(time: number) :void{
-        this.$emit('onSaveTask',{
-          durationInSeconds: time,
-          description: this.description,
-          project: this.projects.find((project) => project.id === this.idProject)
-        })
-        this.description = ''
-      }
-    },
-    setup (){
+
+    setup(props, context){
       const store = useStore(key)
+      const projects =  computed(()=> store.state.project.projects) 
+      const description = ref("")
+      const idProject = ref("")
+
+      const saveTask = (time: number) :void => {
+        context.emit('onSaveTask',{
+          durationInSeconds: time,
+          description: description.value,
+          project: projects.value.find((project) => project.id === idProject.value)
+        })
+        description.value = ''
+      }
+
       return {
-        projects: computed(()=> store.state.project.projects)
+        description,
+        idProject,
+        projects,
+        saveTask,
       }
     }
 })
