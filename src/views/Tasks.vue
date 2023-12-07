@@ -18,37 +18,34 @@
     <ComponentBox v-if="listIsEmpty" :listIsEmpty="listIsEmpty">
       Você não esta muito produtivo hoje 🤔
     </ComponentBox>
-    <div class="modal" :class="{ 'is-active': selectTask }" v-if="selectTask">
-      <div class="modal-background"></div>
-      <div class="modal-card">
-        <header class="modal-card-head">
+    <Modal :show="selectTask != null">
+      <template v-slot:header>
           <p class="modal-card-title">Edit Task</p>
           <button class="delete" aria-label="close" @click="closeModal" />
-        </header>
-        <section class="modal-card-body">
+        </template>
+        <template v-slot:body>
           <div class="field">
             <label for="taskDescription" class="label"> Description </label>
             <input
               type="text"
               class="input"
-              v-model="selectTask.description"
+              v-model="selectTask?.description"
               id="taskDescription"
             />
           </div>
-        </section>
-        <footer class="modal-card-foot">
+        </template>
+        <template v-slot:footer>
           <button class="button is-success" @click="changeTask">
             Save changes
           </button>
           <button class="button" @click="closeModal">Cancel</button>
-        </footer>
-      </div>
-    </div>
+        </template>
+    </Modal>
   </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from "vue";
+import { computed, defineComponent, ref, watchEffect } from "vue";
 
 import TheForm from "../components/TheForm.vue";
 import Task from "../components/Task.vue";
@@ -61,6 +58,7 @@ import {
   EDIT_TASK,
 } from "@/store/type-actions";
 import { useStore } from "@/store";
+import Modal from "@/components/Modal.vue";
 
 export default defineComponent({
   name: "Tasks",
@@ -68,7 +66,8 @@ export default defineComponent({
     TheForm,
     Task,
     ComponentBox,
-  },
+    Modal,
+},
   data() {
     return {
       selectTask: null as ITask | null,
@@ -80,10 +79,13 @@ export default defineComponent({
     store.dispatch(GET_TASKS);
 
     const filter = ref("")
-    const tasks = computed(() => store.state.tasks.filter((task) => !filter.value || task.description.includes(filter.value) ))
+    // const tasks = computed(() => store.state.tasks.filter((task) => !filter.value || task.description.includes(filter.value) ))
 
+    watchEffect(()=>{
+      store.dispatch(GET_TASKS, filter.value)
+    })
     return {
-      tasks,
+      tasks: computed(()=> store.state.tasks),
       store,
       filter
     };
