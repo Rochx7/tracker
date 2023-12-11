@@ -29,7 +29,7 @@
             <input
               type="text"
               class="input"
-              v-model="selectTask?.description"
+              v-model="selectTask.description"
               id="taskDescription"
             />
           </div>
@@ -68,48 +68,46 @@ export default defineComponent({
     ComponentBox,
     Modal,
 },
-  data() {
-    return {
-      selectTask: null as ITask | null,
-    };
-  },
+
   setup() {
     const store = useStore();
     store.dispatch(GET_PROJECTS);
     store.dispatch(GET_TASKS);
 
     const filter = ref("")
-    // const tasks = computed(() => store.state.tasks.filter((task) => !filter.value || task.description.includes(filter.value) ))
-
+    const selectTask = ref<ITask | null>(null)
+    
     watchEffect(()=>{
       store.dispatch(GET_TASKS, filter.value)
     })
+
+    const saveTask = (task: ITask): void=> {
+      store.dispatch(REGISTER_TASK, task);
+    }
+
+    const changeTask= ()=> {
+      store
+        .dispatch(EDIT_TASK, selectTask.value)
+        .then(() => closeModal());
+    }
+    const selectedTask = (task: ITask)=> {
+      selectTask.value = task;
+    }
+    const closeModal = () => {
+      selectTask.value = null
+    }
+
     return {
       tasks: computed(()=> store.state.tasks),
+      listIsEmpty: computed(()=> store.state.tasks.length === 0),
+      saveTask,
       store,
-      filter
+      filter,
+      selectedTask,
+      selectTask,
+      changeTask,
+      closeModal
     };
-  },
-  computed: {
-    listIsEmpty(): boolean {
-      return this.tasks.length === 0;
-    },
-  },
-  methods: {
-    saveTask(task: ITask): void {
-      this.store.dispatch(REGISTER_TASK, task);
-    },
-    changeTask() {
-      this.store
-        .dispatch(EDIT_TASK, this.selectTask)
-        .then(() => this.closeModal());
-    },
-    selectedTask(task: ITask) {
-      this.selectTask = task;
-    },
-    closeModal() {
-      this.selectTask = null;
-    },
   },
 });
 </script>

@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue'
+import {computed, defineComponent} from 'vue'
 
 export default defineComponent ({
   name: 'StopWatch',
@@ -18,17 +18,17 @@ export default defineComponent ({
       type: Boolean
     }
   },
-  computed: { 
-		timeElapsed ():string {
-      return new Date(this.timingInSecond * 1000).toISOString().substr(11,8)
-		}
-	},
+  setup(props) {
+    return{
+      timeElapsed: computed(()=> new Date(props.timingInSecond * 1000).toISOString().substr(11,8) )
+    }
+  },
 })
 </script>
 
 <style scoped>
 .display {
-  color: var(--text-primary);
+  color: var(--text-secondary);
 }
 .box-task{
   color: var(--text-secondary);

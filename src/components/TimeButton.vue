@@ -1,5 +1,5 @@
 <template>
-  <button class="button" @click="onClick" :disabled="disabled">
+  <button class="button" @click="onClick" :disabled="buttonEnabled">
       <span class="icon">
         <i :class="icon"></i>
       </span>
@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue';
+  import { computed, defineComponent } from 'vue';
   export default defineComponent({
     name: 'TimeButton',
     emits:['onClick'],
@@ -25,10 +25,16 @@
       required: true
     },
   },
-  methods:{
-    onClick(){
-      this.$emit('onClick')
+  setup(props, context) {
+    const onClick = () =>{
+      context.emit('onClick')
+    }  
+
+    return{ 
+      onClick,
+      buttonEnabled: computed(()=> props.disabled),
+      ...props
     }
-  }
+  },
   })
 </script>

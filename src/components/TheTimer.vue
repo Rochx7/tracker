@@ -7,34 +7,39 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue'
+import {computed, defineComponent, ref} from 'vue'
 import StopWatch from './StopWatch.vue'
 import TimeButton from './TimeButton.vue';
 export default defineComponent({
     name: 'TheTimer',
+    components: { StopWatch, TimeButton },
     emit:['finishCounting'],
-    data: () => {
-        return {
-            timingInSecond: 0,
-            stopwatch: 0,
-            counting: false
-        };
-    },
-    methods: {
-        init() {
-          this.counting = true
-            this.stopwatch = setInterval(() => {
-                this.timingInSecond += 1;
+    setup(props, context) {
+
+      const counting = ref(false)
+      const stopwatch = ref(0)
+      const timingInSecond = ref(0)
+
+      const init = () => {
+          counting.value = true
+            stopwatch.value = setInterval(() => {
+                timingInSecond.value += 1;
             }, 1000);
-        },
-        finalize() {
-          this.counting = false
-            clearInterval(this.stopwatch);
-            this.$emit('finishCounting', this.timingInSecond)
-            this.timingInSecond = 0
         }
-    },
-    components: { StopWatch, TimeButton }
+        const finalize = () => {
+            counting.value = false
+            clearInterval(stopwatch.value);
+            context.emit('finishCounting', timingInSecond.value)
+            timingInSecond.value = 0
+        }
+      return {
+            timingInSecond,
+            stopwatch,
+            counting: computed(()=> counting.value),
+            init,
+            finalize,
+        };        
+    },    
 })
 
 </script>

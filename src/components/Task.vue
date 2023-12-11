@@ -23,6 +23,7 @@ import { defineComponent, PropType } from 'vue';
 
 export default defineComponent({
   name:'Task',
+  components:{ StopWatch, ComponentBox },
   emits:['onTaskClick'],
   props:{
     task:{
@@ -30,12 +31,15 @@ export default defineComponent({
         required: true
     }
   },
-  methods:{
-    clickedTask():void{
-      this.$emit('onTaskClick', this.task)
+  setup(props,context){
+    const clickedTask = ():void =>{
+      context.emit('onTaskClick', props.task)
+    }
+    return {
+      clickedTask
     }
   },
-  components:{ StopWatch, ComponentBox }
+  
 })
 </script>
 
