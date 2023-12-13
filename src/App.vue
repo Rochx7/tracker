@@ -1,70 +1,70 @@
 <template>
-  <main class="columns is-gapless is-multiline" :class="{'theme-dark': darkThemeEnabled}">
-    <div class="column is-one-quarter">
-      <SideBar @onChangeTheme="changeTheme"/>
-    </div>
-    <div class="column is-three-quarter content" >
-      <Notifications/>
+  <main :class="{ 'theme-dark': darkThemeEnabled }">
+    <SideBar @onChangeTheme="changeTheme" />
+    <div class="content">
+      <Notifications />
       <router-view></router-view>
     </div>
   </main>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent } from "vue";
 
-import SideBar from './components/SideBar.vue'
-import Notifications from './components/Notifications.vue'
-import ITask from './interfaces/ITask'
+import SideBar from "./components/SideBar.vue";
+import Notifications from "./components/Notifications.vue";
+import ITask from "./interfaces/ITask";
 
 export default defineComponent({
-  name: 'App',
-  data: () =>{
+  name: "App",
+  data: () => {
     return {
       tasks: [] as ITask[],
-      darkThemeEnabled:false
-    }
+      darkThemeEnabled: false,
+    };
   },
-  computed:{
-    listIsEmpty():boolean{
-      return this.tasks.length === 0
-    }
-  },
-  methods:{
-    saveTask(task:ITask){
-      this.tasks.push(task)
+  computed: {
+    listIsEmpty(): boolean {
+      return this.tasks.length === 0;
     },
-    changeTheme(darkThemeEnabled:boolean){
-      this.darkThemeEnabled = darkThemeEnabled
-    }
   },
-  components:{
+  methods: {
+    saveTask(task: ITask) {
+      this.tasks.push(task);
+    },
+    changeTheme(darkThemeEnabled: boolean) {
+      this.darkThemeEnabled = darkThemeEnabled;
+    },
+  },
+  components: {
     SideBar,
-    Notifications
-}
+    Notifications,
+  },
 });
 </script>
 
 <style>
-.list{
-  padding: 1.25rem
+main {
+  --bg-primary: #efede3;
+  --bg-secondary: #222120;
+  --link-primary: #f68b1b;
+  --bg-sideBar: #222120;
+  --bg-box-primary: #f68b1b;
+  --text-primary: #222120;
+  --text-secondary: #efede3;
 }
-main{
-  --bg-primary: #F4F5F5;
-  --bg-sideBar: #424769;
-  --bg-box-primary: #424769;
-  --text-primary: #2d3250;
-  --text-secondary: #F4F5F5;
+main.theme-dark {
+  --bg-primary: #222120;
+  --bg-secondary: #f68b1b;
+  --link-primary: #222120;
+  --bg-sideBar: #f68b1b;
+  --bg-box-primary: #efede3;
+  --text-primary: #efede3;
+  --text-secondary: #222120;
 }
-main.theme-dark{
-  --bg-primary: #2d3250;
-  --bg-sideBar: #424769;
-  --bg-box-primary: #F4F5F5;
-  --text-primary: #F4F5F5;
-  --text-secondary: #2d3250;
+.content {
+  width: 100%;
+  height: 100vh;
+  background-color: var(--bg-primary);
 }
-.content{
-  background-color:var(--bg-primary);
-}
-
 </style>
