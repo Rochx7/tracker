@@ -1,29 +1,29 @@
 <template>
-  <div class="box has-text-weight-bold" :class="{ 'emptyBox': listIsEmpty }">
+  <div class="box has-text-weight-bold" :class="{ emptyBox: listIsEmpty }">
     <slot></slot>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: 'ComponentBox',
+  name: "ComponentBox",
   props: {
     listIsEmpty: {
-      type: Boolean
-    }
+      type: Boolean,
+    },
   },
-})
+});
 </script>
 <style scoped>
 .box {
-  background: var(--bg-box-primary);
-  color: var(--text-secondary)
+  background: var(--bg-box-secondary);
+  color: var(--text-light);
 }
 
 .emptyBox {
-  background-color: var(--bg-box-primary);
-  color: var(--text-secondary);
+  background-color: var(--bg-box-secondary);
+  color: var(--text-light);
 }
 </style>

@@ -1,28 +1,41 @@
 <template>
-  <header>
-    <div class="nav">
-      <div class="title-links">
-        <h1 class="title">Tracker</h1>
-
-        <div class="links">
-          <router-link to="/" class="link">
-            <i class="fas fa-tasks"></i> Tasks
-          </router-link>
-          <router-link to="/projects" class="link">
-            <i class="fas fa-project-diagram"></i> Projects
-          </router-link>
+  <aside class="menu">
+    <h1 class="title">Tracker</h1>
+    <p class="menu-label">General</p>
+    <ul class="menu-list">
+      <li>
+        <router-link
+          to="/"
+          class="link"
+          :class="{ 'is-active': isRouteActive('/') }"
+        >
+          <i class="fas fa-tasks"></i> Tasks
+        </router-link>
+      </li>
+      <li>
+        <router-link
+          to="/projects"
+          class="link"
+          :class="{ 'is-active': isRouteActive('/projects') }"
+        >
+          <i class="fas fa-project-diagram"></i> Projects
+        </router-link>
+      </li>
+    </ul>
+    <p class="menu-label">Settings</p>
+    <ul class="menu-list">
+      <li>
+        <div class="button is-primary is-light" @click="changeTheme">
+          {{ textButton }}
         </div>
-      </div>
-
-      <div class="button" @click="changeTheme">
-        {{ textButton }}
-      </div>
-    </div>
-  </header>
+      </li>
+    </ul>
+  </aside>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { useRoute } from "vue-router";
 export default defineComponent({
   name: "SideBar",
   emit: ["onChangeTheme"],
@@ -41,15 +54,19 @@ export default defineComponent({
       this.darkTheme = !this.darkTheme;
       this.$emit("onChangeTheme", this.darkTheme);
     },
+    isRouteActive(route: string) {
+      const currentRoute = useRoute();
+      return currentRoute.path === route;
+    },
   },
 });
 </script>
 
 <style scoped>
-header {
+aside {
   width: 100%;
-  text-align: center;
-  background: var(--bg-secondary);
+  height: 100%;
+  background: var(--background-dark-grey);
   padding: 8px;
 }
 .nav {
@@ -70,7 +87,7 @@ header {
 }
 .title {
   text-align: left;
-  color: #efede3;
+  color: var(--text-light-green);
   margin-right: 24px;
   margin-bottom: 0;
 }
@@ -78,15 +95,13 @@ h1 {
   padding-top: 0.5rem;
   text-align: center;
 }
-.link {
-  color: #efede3;
+a {
+  color: var(--text-light);
 }
-.link:hover {
-  color: var(--link-primary);
+.menu-list a.is-active {
+  background-color: #16c87e;
 }
-.link.router-link-active {
-  color: var(--link-primary);
-}
+
 @media only screen and (max-width: 580px) {
   .title-links {
     flex-direction: column;

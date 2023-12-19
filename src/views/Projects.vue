@@ -6,16 +6,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: 'Projects'
-})
-
+  name: "Projects",
+});
 </script>
 
 <style scoped>
-  .projects{
-    padding: 1.5rem
-  }
+.projects {
+  padding: 1.5rem;
+}
+.title {
+  color: var(--text-primary);
+}
 </style>

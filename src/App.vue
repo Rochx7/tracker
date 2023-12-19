@@ -1,7 +1,12 @@
 <template>
-  <main :class="{ 'theme-dark': darkThemeEnabled }">
-    <SideBar @onChangeTheme="changeTheme" />
-    <div class="content">
+  <main
+    class="columns is-gapless is-multiline"
+    :class="{ 'theme-dark': darkThemeEnabled }"
+  >
+    <div class="column is-one-quarter">
+      <SideBar @onChangeTheme="changeTheme" />
+    </div>
+    <div class="column is-three-quarter content">
       <Notifications />
       <router-view></router-view>
     </div>
@@ -47,20 +52,27 @@ export default defineComponent({
 main {
   --bg-primary: #efede3;
   --bg-secondary: #222120;
-  --link-primary: #f68b1b;
+  --link-primary: #16c87e;
   --bg-sideBar: #222120;
-  --bg-box-primary: #f68b1b;
+  --bg-box-primary: #16c87e;
+  --bg-box-secondary: #16c87e;
   --text-primary: #222120;
-  --text-secondary: #efede3;
+  --text-secondary: #1e1f1e;
+  --background-dark-grey: #1e1f1e;
+  --text-light: #efede3;
+  --text-light-green: #16c87e;
 }
 main.theme-dark {
-  --bg-primary: #222120;
-  --bg-secondary: #f68b1b;
+  --bg-primary: #141515;
+  --bg-secondary: #16c87e;
   --link-primary: #222120;
-  --bg-sideBar: #f68b1b;
+  --bg-sideBar: #16c87e;
   --bg-box-primary: #efede3;
+  --bg-box-secondary: #222120;
   --text-primary: #efede3;
-  --text-secondary: #222120;
+  --text-secondary: #16c87e;
+  --text-light: #efede3;
+  --text-light-green: #16c87e;
 }
 .content {
   width: 100%;
